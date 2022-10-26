@@ -52,16 +52,15 @@ exports.getTodo = (req, res, next) => {
 exports.postAddTodo = (req, res, next) => {
 	const sql =
     "INSERT INTO todo (message) VALUES ($1)";
-	// const key = Math.floor(Math.random() * 100) + 1;;
 	const todo = [
 		req.body.message
 	]
-
-	// const todoData = JSON.parse(todofile);
-
-	// todoData.push(todo);
-	// fs.writeFile(path.join('data', 'todo.json'), JSON.stringify(todoData),(err)=>{
-	// 	console.log(err);
-	// });
-	res.status(201).json({ message: 'todo created'})
+	pool.query(sql, book, (err, result) => {
+		if (err) {
+		  console.log(err);
+		  return res.redirect("/add-todo");
+		}
+		// res.redirect("/");
+		res.status(201).json({ message: 'todo created'})
+	  });
 };

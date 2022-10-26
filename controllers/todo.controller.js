@@ -1,5 +1,11 @@
-
+const fs = require('fs');
+const path = require('path');
 
 exports.getTodo = (req, res, next) => {
-	res.json({ message: 'hello ' });
+	const todofile = fs.readFileSync(path.join('data', 'todo.json'), {
+		encoding: 'utf8',
+		flag: 'r',
+	});
+	const tododata = JSON.parse(todofile);
+	res.json({ message: tododata });
 };

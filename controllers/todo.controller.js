@@ -15,7 +15,7 @@ exports.getTodo = (req, res, next) => {
 	const sql = "SELECT * FROM todo ORDER BY ID ASC";
 	pool.query(sql, [], (err, result) => {
 	  if (err) {
-		return console.error(err.message);
+		 res.status(400).json({ msg: " failed to fecth Todo" });
 	  }
 	  console.log(result.rows);
 	  res.status(200).json({ todo: result.rows });
@@ -32,39 +32,26 @@ exports.postAddTodo = (req, res, next) => {
 	pool.query(sql, todo, (err, result) => {
 		if (err) {
 		  console.log(err);
-		  return res.redirect("/add-todo");
+      res.status(400).json({ message: 'failed to add todo'})
 		}
-		// res.redirect("/");
 		res.status(201).json({ message: 'todo created'})
 	  });
 };
 
+//suppression dans la data base
 exports.deleteTodo = (req, res, next) => {
+	const id = req.params.id;
+	console.log(id);
+	const sql = "DELETE FROM todo WHERE ID = $1";
+	pool.query(sql, [id], (err, result) => {
+	  if (err) {
+		  console.log(err)
+		   res.status(400).json({ msg: " failed to delete Todo" });
+	  } 
+		  res.status(201).json({ msg: "Todo deleted" });
+	  
+	});	
 
-	const todoData = JSON.parse(todofile);
-	console.log(todoData);;
-
-	const todoIndex = todoData.findIndex((todo) => (todo.id = req.params.id));
-	console.log(todoIndex);
-
-	if (todoIndex != null) {
-		todoData.splice(todoIndex, 1);
-		fs.writeFile(path.join('data', 'todo.json'), JSON.stringify(todoData), (err) => {
-			console.log(err);
-			res.status(200).json({ msg: "Todo deleted successfulconst todoData = JSON.parse(todofile);ly" });
-		});
-	} else {
-
-		res.status(404).json({ msg: "Todo not found" });
-	}
-
-
-	todoData.push(todo);
-	fs.writeFile(path.join('data', 'todo.json'), JSON.stringify(todoData), (err) => {
-		console.log(err);
-	});
-	res.status(201).json({ message: 'todo created' })
-}
 
 exports.putEditTodo = (request, response) => {
   const id = parseInt(request.params.id)
@@ -75,10 +62,11 @@ exports.putEditTodo = (request, response) => {
     [message, id],
     (error, results) => {
       if (error) {
-        throw error
+         res.status(400).json({ msg: " failed to update Todo" });
       }
       response.status(200).send(`message modified with ID: ${id}`)
     }
   )
 }
+
 

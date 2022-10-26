@@ -7,7 +7,7 @@ const todofile = fs.readFileSync(path.join('data', 'todo.json'), {
 });
 exports.getTodo = (req, res, next) => {
 	const tododata = JSON.parse(todofile);
-	res.json({ message: tododata });
+	res.status(200).json({ todo: tododata });
 };
 
 exports.postAddTodo = (req, res, next) => {
@@ -22,5 +22,5 @@ exports.postAddTodo = (req, res, next) => {
 	fs.writeFile(path.join('data', 'todo.json'), JSON.stringify(todoData),(err)=>{
 		console.log(err);
 	});
-	res.redirect('/');
+	res.status(201).json({ message: 'todo created'})
 };

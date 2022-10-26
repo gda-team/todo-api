@@ -50,7 +50,12 @@ exports.getTodo = (req, res, next) => {
 };
 
 exports.postAddTodo = (req, res, next) => {
-
+	const sql =
+    "INSERT INTO todo (message) VALUES ($1)";
+	// const key = Math.floor(Math.random() * 100) + 1;;
+	const todo = [
+		req.body.message
+	]
 
 	// const todoData = JSON.parse(todofile);
 

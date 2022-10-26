@@ -22,5 +22,5 @@ exports.postAddTodo = (req, res, next) => {
 	fs.writeFile(path.join('data', 'todo.json'), JSON.stringify(todoData),(err)=>{
 		console.log(err);
 	});
-	res.redirect('/');
+	res.status(201).json({ message: 'todo created'})
 };

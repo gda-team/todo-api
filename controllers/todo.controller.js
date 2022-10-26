@@ -17,11 +17,10 @@ exports.postAddTodo = (req, res, next) => {
 		"message": req.body.message,
 	}
 	const todoData = JSON.parse(todofile);
-	
+
 	todoData.push(todo);
 	fs.writeFile(path.join('data', 'todo.json'), JSON.stringify(todoData),(err)=>{
 		console.log(err);
 	});
-	console.log(todoData)
 	res.redirect('/');
 };

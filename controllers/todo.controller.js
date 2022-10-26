@@ -64,25 +64,21 @@ exports.deleteTodo = (req, res, next) => {
 		console.log(err);
 	});
 	res.status(201).json({ message: 'todo created'})
-};
-exports.putEditTodo = (req, res, next) => {
-	
-	const todo = {
-		'id':req.params.id,
-		"message": req.body.message,
-	}
-	var id = req.params.id
-	var message = req.body.message
-	const todoData = JSON.parse(todofile);
-	 var index = todoData.findIndex(value => value.id == todo.id)
-    todoData[index] = {
-        ...todoData[index],
-        message: todo.message
+
+
+exports.putEditTodo = (request, response) => {
+  const id = parseInt(request.params.id)
+  const { message } = request.body
+
+  pool.query(
+    'UPDATE todo SET message = $1 WHERE id = $2',
+    [message, id],
+    (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).send(`message modified with ID: ${id}`)
     }
-	
-	fs.writeFile(path.join('data', 'todo.json'), JSON.stringify(todoData),(err)=>{
-		console.log(err);
-	});
-	res.status(201).json({ message: 'todo update'})
-};
+  )
+}
 

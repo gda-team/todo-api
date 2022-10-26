@@ -7,5 +7,5 @@ exports.getTodo = (req, res, next) => {
 		flag: 'r',
 	});
 	const tododata = JSON.parse(todofile);
-	res.json({ message: tododata });
+	res.status(200).json({ todo: tododata });
 };

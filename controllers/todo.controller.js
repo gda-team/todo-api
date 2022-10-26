@@ -27,13 +27,23 @@ exports.postAddTodo = (req, res, next) => {
 };
 
 exports.deleteTodo = (req, res, next) => {
-	const todoIndex = todos.findIndex((todo) => (todo.id = request.params.id));
-	if (todoIndex) {
-	  todos.splice(todoIndex, 1);
-	  res.status(200).json({ msg: "Todo deleted successfully" });
+
+	const todoData = JSON.parse(todofile);
+    console.log(todoData);;
+
+	const todoIndex = todoData.findIndex((todo) => (todo.id = req.params.id));
+	console.log(todoIndex);
+
+	if (todoIndex != null) {
+		todoData.splice(todoIndex, 1);
+		fs.writeFile(path.join('data', 'todo.json'), JSON.stringify(todoData),(err)=>{
+			console.log(err);
+			res.status(200).json({ msg: "Todo deleted successfulconst todoData = JSON.parse(todofile);ly" });
+		});
+	}else{
+
+		res.status(404).json({ msg: "Todo not found" });
 	}
-	
-	res.status(404).json({ msg: "Todo not found" });
 
 }
 

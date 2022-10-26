@@ -1,47 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 const { Pool } = require("pg");
+const pool = require('../config/db')
 
 const dotenv = require('dotenv');
 dotenv.config();
-
-const pool = new Pool({
-    user: "oetzeioj",
-    host: "peanut.db.elephantsql.com",
-    database: "oetzeioj",
-    password: "V1HSQczUMcdz1Vh50Nk8sFc3W-AJ0JCb",
-    port: 5432,
-  });
-  const sql_create = `
-CREATE TABLE IF NOT EXISTS todo (
-  ID SERIAL PRIMARY KEY,
-  message VARCHAR(150) NOT NULL
-);`;
-
-pool.query(sql_create, [], (err, result) => {
-  if (err) {
-    return console.error(err.message);
-  }
-  console.log("Création réussie de la table 'todo'");
-});
-
-// Alimentation de la table
-const sql_insert = `INSERT INTO todo (message) VALUES
-    ( 'to do ')
-
-  ON CONFLICT DO NOTHING;`;
-pool.query(sql_insert, [], (err, result) => {
-  if (err) {
-    return console.error(err.message);
-  }
-  const sql_sequence = "SELECT SETVAL('todo_ID_Seq', MAX(ID)) FROM todo;";
-  pool.query(sql_sequence, [], (err, result) => {
-    if (err) {
-      return console.error(err.message);
-    }
-    console.log("Alimentation réussie de la table 'todo'");
-  });
-});
 
 
 const todofile = fs.readFileSync(path.join('data', 'todo.json'), {
@@ -52,7 +15,7 @@ exports.getTodo = (req, res, next) => {
 	const sql = "SELECT * FROM todo ORDER BY ID ASC";
 	pool.query(sql, [], (err, result) => {
 	  if (err) {
-		return console.error(err.message);
+		 res.status(400).json({ msg: " failed to fecth Todo" });
 	  }
 	  console.log(result.rows);
 	  res.status(200).json({ todo: result.rows });
@@ -65,15 +28,12 @@ exports.getTodo = (req, res, next) => {
 exports.postAddTodo = (req, res, next) => {
 	const sql =
     "INSERT INTO todo (message) VALUES ($1)";
-	const todo = [
-		"val"
-	]
-	pool.query(sql, book, (err, result) => {
+	const todo = ["val"]
+	pool.query(sql, todo, (err, result) => {
 		if (err) {
 		  console.log(err);
-		  return res.redirect("/add-todo");
+      res.status(400).json({ message: 'failed to add todo'})
 		}
-		// res.redirect("/");
 		res.status(201).json({ message: 'todo created'})
 	  });
 };
@@ -85,14 +45,28 @@ exports.deleteTodo = (req, res, next) => {
 	const sql = "DELETE FROM todo WHERE ID = $1";
 	pool.query(sql, [id], (err, result) => {
 	  if (err) {
-
 		  console.log(err)
-		  return res.redirect("/");
+		   res.status(400).json({ msg: " failed to delete Todo" });
 	  } 
-		  res.status(404).json({ msg: "Todo deleted" });
+		  res.status(201).json({ msg: "Todo deleted" });
 	  
 	});	
 
+
+exports.putEditTodo = (request, response) => {
+  const id = parseInt(request.params.id)
+  const { message } = request.body
+
+  pool.query(
+    'UPDATE todo SET message = $1 WHERE id = $2',
+    [message, id],
+    (error, results) => {
+      if (error) {
+         res.status(400).json({ msg: " failed to update Todo" });
+      }
+      response.status(200).send(`message modified with ID: ${id}`)
+    }
+  )
 }
 
 

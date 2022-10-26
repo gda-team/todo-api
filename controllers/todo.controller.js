@@ -78,24 +78,21 @@ exports.postAddTodo = (req, res, next) => {
 	  });
 };
 
+//suppression dans la data base
 exports.deleteTodo = (req, res, next) => {
+	const id = req.params.id;
+	console.log(id);
+	const sql = "DELETE FROM todo WHERE ID = $1";
+	pool.query(sql, [id], (err, result) => {
+	  if (err) {
 
-	const todoData = JSON.parse(todofile);
-    console.log(todoData);;
-
-	const todoIndex = todoData.findIndex((todo) => (todo.id = req.params.id));
-	console.log(todoIndex);
-
-	if (todoIndex != null) {
-		todoData.splice(todoIndex, 1);
-		fs.writeFile(path.join('data', 'todo.json'), JSON.stringify(todoData),(err)=>{
-			console.log(err);
-			res.status(200).json({ msg: "Todo deleted successfulconst todoData = JSON.parse(todofile);ly" });
-		});
-	}else{
-
-		res.status(404).json({ msg: "Todo not found" });
-	}
+		  console.log(err)
+		  return res.redirect("/");
+	  } 
+		  res.status(404).json({ msg: "Todo deleted" });
+	  
+	});	
 
 }
+
 

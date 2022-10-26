@@ -99,3 +99,30 @@ exports.deleteTodo = (req, res, next) => {
 
 }
 
+	todoData.push(todo);
+	fs.writeFile(path.join('data', 'todo.json'), JSON.stringify(todoData),(err)=>{
+		console.log(err);
+	});
+	res.status(201).json({ message: 'todo created'})
+};
+exports.putEditTodo = (req, res, next) => {
+	
+	const todo = {
+		'id':req.params.id,
+		"message": req.body.message,
+	}
+	var id = req.params.id
+	var message = req.body.message
+	const todoData = JSON.parse(todofile);
+	 var index = todoData.findIndex(value => value.id == todo.id)
+    todoData[index] = {
+        ...todoData[index],
+        message: todo.message
+    }
+	
+	fs.writeFile(path.join('data', 'todo.json'), JSON.stringify(todoData),(err)=>{
+		console.log(err);
+	});
+	res.status(201).json({ message: 'todo update'})
+};
+

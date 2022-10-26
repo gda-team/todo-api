@@ -30,12 +30,13 @@ exports.putEditTodo = (req, res, next) => {
 		'id':req.params.id,
 		"message": req.body.message,
 	}
-	
+	var id = req.params.id
+	var message = req.body.message
 	const todoData = JSON.parse(todofile);
-	 var index = todoData.findIndex(value => value.id == todo.id)
+	 var index = todoData.findIndex(value => value.id == id)
     todoData[index] = {
         ...todoData[index],
-        message: todo.message
+        message: message
     }
 	
 	fs.writeFile(path.join('data', 'todo.json'), JSON.stringify(todoData),(err)=>{

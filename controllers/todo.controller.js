@@ -5,5 +5,6 @@ exports.getTodo = (req, res, next) => {
 };
 exports.postAddTodo = (req, res, next) => {
 	this.id = Math.random().toString();
+	
 	res.json({ message: 'hello ' });
 };

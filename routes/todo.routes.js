@@ -1,4 +1,4 @@
-const { getTodo } = require('../controllers/todo.controller');
+const { getTodo, postAddTodo } = require('../controllers/todo.controller');
 
 const router = require('express').Router();
 

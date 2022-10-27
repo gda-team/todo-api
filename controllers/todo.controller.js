@@ -1,15 +1,7 @@
-const fs = require('fs');
-const path = require('path');
 const pool = require('../config/db');
+require('dotenv').config();
 
 
-const dotenv = require('dotenv');
-dotenv.config();
-
-const todofile = fs.readFileSync(path.join('data', 'todo.json'), {
-	encoding: 'utf8',
-	flag: 'r',
-});
 exports.getTodo = (req, res, next) => {
 	const sql = 'SELECT * FROM todo ORDER BY ID ASC';
 	pool.query(sql, [], (err, result) => {
@@ -20,8 +12,6 @@ exports.getTodo = (req, res, next) => {
 			res.status(200).json({ todo: result.rows });
 		}
 	});
-
-
 };
 
 exports.postAddTodo = (req, res, next) => {

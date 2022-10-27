@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const pool = require('../config/db');
 
+
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -20,7 +21,7 @@ exports.getTodo = (req, res, next) => {
 		}
 	});
 
-	// const tododata = JSON.parse(todofile);
+
 };
 
 exports.postAddTodo = (req, res, next) => {
@@ -42,6 +43,7 @@ exports.deleteTodo = (req, res, next) => {
 	console.log(id);
 	const sql = 'DELETE FROM todo WHERE ID = $1';
 	pool.query(sql, [id], (err, result) => {
+
 		if (err) {
 			console.log(err);
 			res.status(400).json({ msg: ' failed to delete Todo' });
@@ -50,6 +52,7 @@ exports.deleteTodo = (req, res, next) => {
 		}
 	});
 };
+
 
 exports.putEditTodo = (request, response) => {
 	const id = parseInt(request.params.id);

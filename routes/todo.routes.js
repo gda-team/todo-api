@@ -1,6 +1,5 @@
 const { getTodo, postAddTodo, deleteTodo ,putEditTodo } = require('../controllers/todo.controller');
 
-
 const router = require('express').Router();
 
 router.get('/', getTodo);

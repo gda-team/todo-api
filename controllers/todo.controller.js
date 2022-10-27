@@ -44,14 +44,14 @@ exports.deleteTodo = (req, res, next) => {
 	console.log(id);
 	const sql = "DELETE FROM todo WHERE ID = $1";
 	pool.query(sql, [id], (err, result) => {
-	  if (err) {
-		  console.log(err)
-		   res.status(400).json({ msg: " failed to delete Todo" });
-	  } 
-		  res.status(201).json({ msg: "Todo deleted" });
+		if (err) {
+			console.log(err)
+			res.status(400).json({ msg: " failed to delete Todo" });
+		}
+		res.status(201).json({ msg: "Todo deleted" });
 	  
-	});	
-
+	});
+}
 
 exports.putEditTodo = (request, response) => {
   const id = parseInt(request.params.id)

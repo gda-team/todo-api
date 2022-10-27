@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const { Pool } = require("pg");
 const pool = require('../config/db')
 
 const dotenv = require('dotenv');
@@ -21,7 +20,7 @@ exports.getTodo = (req, res, next) => {
 	  res.status(200).json({ todo: result.rows });
 	});
 
-	// const tododata = JSON.parse(todofile);
+
 };
 
 
@@ -52,6 +51,7 @@ exports.deleteTodo = (req, res, next) => {
 	  
 	});	
 
+}
 
 exports.putEditTodo = (request, response) => {
   const id = parseInt(request.params.id)
